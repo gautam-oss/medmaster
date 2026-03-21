@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}AI Health Assistant - MedMaster{% endblock %}
+{% block extra_css %}<link href="{% static 'css/chat.css' %}" rel="stylesheet">{% endblock %}
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row justify-content-center">
+        <div class="col-xl-10 col-lg-11">
+            {% if not user.is_authenticated %}
+            <div class="alert alert-info mb-3" style="border-radius:15px;">
+                <i class="fas fa-info-circle fa-lg me-3"></i>
+                <strong>Guest Mode:</strong> You're using the chatbot as a guest.
+                <a href="{% url 'users:register_patient' %}" class="alert-link fw-bold">Register</a> or
+                <a href="{% url 'users:login' %}" class="alert-link fw-bold">Login</a> to save your conversation history!
+            </div>
+            {% endif %}
+            <div class="card chat-card shadow border-0">
+                <div class="chat-header">
+                    <h4><i class="fas fa-robot robot-icon"></i>AI Health Assistant</h4>
+                    <small><i class="fas fa-shield-alt me-1"></i>Powered by Google Gemini AI | Available 24/7</small>
+                </div>
+                <div class="card-body p-0">
+                    <div id="chatMessages" class="chat-messages">
+                        <div class="welcome-message">
+                            <h5><i class="fas fa-hand-sparkles me-2"></i>Hello {% if user.is_authenticated %}{{ user.first_name|default:user.username }}{% else %}there{% endif %}! 👋</h5>
+                            <p class="mb-2">I'm your MedMaster AI Health Assistant. I can help you with general health information, medical terms, symptom guidance, and healthy lifestyle tips.</p>
+                            <p class="mb-0 small"><i class="fas fa-exclamation-triangle me-1"></i><strong>Note:</strong> Always consult healthcare professionals for medical advice.</p>
+                        </div>
+                        {% for message in messages %}
+                        <div class="message {% if message.is_from_user %}user-message{% else %}ai-message{% endif %}">
+                            <div class="message-wrapper">
+                                <div class="message-sender">
+                                    {% if message.is_from_user %}<i class="fas fa-user-circle"></i> You{% else %}<i class="fas fa-robot"></i> AI Assistant{% endif %}
+                                </div>
+                                <div class="message-content"><div class="message-text">{{ message.content|linebreaks }}</div></div>
+                                <div class="message-time"><i class="far fa-clock me-1"></i>{{ message.created_at|date:"M d, Y H:i" }}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div id="typingIndicator" class="typing-indicator" style="display:none;">
+                        <div class="message ai-message">
+                            <div class="message-wrapper">
+                                <div class="message-sender"><i class="fas fa-robot"></i> AI Assistant</div>
+                                <div class="message-content"><div class="typing-dots"><span></span><span></span><span></span></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-footer">
+                    <form id="chatForm">
+                        {% csrf_token %}
+                        <div class="d-flex gap-2">
+                            <input type="text" id="messageInput" class="form-control" placeholder="Ask me about health topics, symptoms, or medications..." required autocomplete="off">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane me-2"></i>Send</button>
+                        </div>
+                        <div class="mt-2"><small class="text-muted"><i class="fas fa-lightbulb me-1"></i>Try: "What are the symptoms of flu?" or "Tips for better sleep"</small></div>
+                    </form>
+                </div>
+            </div>
+            <div class="row mt-4 g-2">
+                <div class="col-md-3 col-6"><button class="btn btn-outline-primary w-100 quick-question" data-question="What is diabetes?"><i class="fas fa-question-circle me-2"></i>What is diabetes?</button></div>
+                <div class="col-md-3 col-6"><button class="btn btn-outline-primary w-100 quick-question" data-question="How to lower blood pressure?"><i class="fas fa-heart me-2"></i>Lower blood pressure</button></div>
+                <div class="col-md-3 col-6"><button class="btn btn-outline-primary w-100 quick-question" data-question="Healthy diet tips"><i class="fas fa-utensils me-2"></i>Healthy diet tips</button></div>
+                <div class="col-md-3 col-6"><button class="btn btn-outline-primary w-100 quick-question" data-question="How to reduce stress?"><i class="fas fa-smile me-2"></i>Reduce stress</button></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/chat.js' %}"></script>
+<script>
+    document.querySelectorAll('.quick-question').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.getElementById('messageInput').value = this.getAttribute('data-question');
+            document.getElementById('messageInput').focus();
+        });
+    });
+</script>
+{% endblock %}

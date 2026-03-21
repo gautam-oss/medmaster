@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - MedMaster{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-lg text-white" style="background:linear-gradient(135deg,#667eea,#764ba2);border-radius:20px;">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h2 class="mb-1">Welcome back, {{ user.get_full_name|default:user.username }}!</h2>
+                            <p class="mb-0 opacity-90">
+                                {% if profile_type == 'patient' %}Manage your health appointments and get AI-powered assistance
+                                {% else %}Manage your patient appointments and consultations{% endif %}
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <span class="badge bg-white text-primary fs-6 px-4 py-2">
+                                {% if profile_type == 'patient' %}<i class="fas fa-user me-2"></i>Patient
+                                {% else %}<i class="fas fa-user-md me-2"></i>Doctor{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow border-0 h-100" style="border-radius:20px;">
+                <div class="card-header text-white border-0" style="background:linear-gradient(135deg,#667eea,#764ba2);border-radius:20px 20px 0 0;">
+                    <h5 class="mb-0"><i class="fas fa-user-circle me-2"></i>Profile Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div style="width:100px;height:100px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
+                            <i class="fas fa-user fa-3x text-white"></i>
+                        </div>
+                        <h5>{{ user.get_full_name|default:user.username }}</h5>
+                        <p class="text-muted small">{{ user.email }}</p>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3 pb-3 border-bottom">
+                        <span class="text-muted"><i class="fas fa-phone me-2"></i>Phone</span>
+                        <span class="fw-bold">{{ user.phone|default:"Not provided" }}</span>
+                    </div>
+                    {% if profile_type == 'doctor' %}
+                    <div class="d-flex justify-content-between mb-3 pb-3 border-bottom">
+                        <span class="text-muted"><i class="fas fa-stethoscope me-2"></i>Specialization</span>
+                        <span class="fw-bold">{{ profile.specialization }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3 pb-3 border-bottom">
+                        <span class="text-muted"><i class="fas fa-award me-2"></i>Experience</span>
+                        <span class="fw-bold">{{ profile.experience_years }} years</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted"><i class="fas fa-dollar-sign me-2"></i>Fee</span>
+                        <span class="fw-bold">${{ profile.consultation_fee }}</span>
+                    </div>
+                    {% else %}
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted"><i class="fas fa-birthday-cake me-2"></i>DOB</span>
+                        <span class="fw-bold">{{ profile.date_of_birth|default:"Not set" }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8 mb-4">
+            <div class="card shadow border-0 h-100" style="border-radius:20px;">
+                <div class="card-header text-white border-0" style="background:linear-gradient(135deg,#10B981,#059669);border-radius:20px 20px 0 0;">
+                    <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        {% if profile_type == 'patient' %}
+                        <div class="col-md-6">
+                            <a href="{% url 'appointments:book' %}" class="text-decoration-none">
+                                <div class="p-4 rounded-4 text-center text-white h-100" style="background:linear-gradient(135deg,#10B981,#059669);">
+                                    <i class="fas fa-calendar-plus fa-3x mb-3"></i>
+                                    <h5>Book Appointment</h5>
+                                    <p class="mb-0 small opacity-90">Schedule with a doctor</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{% url 'appointments:my_appointments' %}" class="text-decoration-none">
+                                <div class="p-4 rounded-4 text-center text-white h-100" style="background:linear-gradient(135deg,#3B82F6,#2563EB);">
+                                    <i class="fas fa-calendar-check fa-3x mb-3"></i>
+                                    <h5>My Appointments</h5>
+                                    <p class="mb-0 small opacity-90">View all appointments</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{% url 'chatbot:chat' %}" class="text-decoration-none">
+                                <div class="p-4 rounded-4 text-center text-white h-100" style="background:linear-gradient(135deg,#F59E0B,#D97706);">
+                                    <i class="fas fa-robot fa-3x mb-3"></i>
+                                    <h5>AI Health Assistant</h5>
+                                    <p class="mb-0 small opacity-90">Get instant health advice</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{% url 'insurance:predict' %}" class="text-decoration-none">
+                                <div class="p-4 rounded-4 text-center text-white h-100" style="background:linear-gradient(135deg,#8B5CF6,#7C3AED);">
+                                    <i class="fas fa-calculator fa-3x mb-3"></i>
+                                    <h5>Insurance Predictor</h5>
+                                    <p class="mb-0 small opacity-90">Estimate insurance costs</p>
+                                </div>
+                            </a>
+                        </div>
+                        {% else %}
+                        <div class="col-md-6">
+                            <a href="{% url 'appointments:my_appointments' %}" class="text-decoration-none">
+                                <div class="p-4 rounded-4 text-center text-white h-100" style="background:linear-gradient(135deg,#3B82F6,#2563EB);">
+                                    <i class="fas fa-calendar-check fa-3x mb-3"></i>
+                                    <h5>Manage Appointments</h5>
+                                    <p class="mb-0 small opacity-90">View patient appointments</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{% url 'chatbot:chat' %}" class="text-decoration-none">
+                                <div class="p-4 rounded-4 text-center text-white h-100" style="background:linear-gradient(135deg,#F59E0B,#D97706);">
+                                    <i class="fas fa-robot fa-3x mb-3"></i>
+                                    <h5>AI Assistant</h5>
+                                    <p class="mb-0 small opacity-90">Medical information tool</p>
+                                </div>
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

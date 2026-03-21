@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}My Appointments - MedMaster{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h2 class="mb-1"><i class="fas fa-calendar-check text-primary me-2"></i>My Appointments</h2>
+            <p class="text-muted mb-0">{% if user.user_type == 'patient' %}Manage and track your medical appointments{% else %}Manage your patient consultations{% endif %}</p>
+        </div>
+        {% if user.user_type == 'patient' %}
+        <a href="{% url 'appointments:book' %}" class="btn btn-success"><i class="fas fa-calendar-plus me-2"></i>Book New Appointment</a>
+        {% endif %}
+    </div>
+    {% if appointments %}
+    <div class="row g-4">
+        {% for appointment in appointments %}
+        <div class="col-lg-6">
+            <div class="card border-0 shadow h-100" style="border-radius:20px;">
+                <div class="card-header border-0 text-white {% if appointment.status == 'confirmed' %}bg-success{% elif appointment.status == 'pending' %}bg-primary{% elif appointment.status == 'completed' %}bg-info{% else %}bg-danger{% endif %}" style="border-radius:20px 20px 0 0;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <strong><i class="fas fa-calendar-alt me-2"></i>{{ appointment.appointment_date|date:"M d, Y" }}</strong>
+                        <span class="badge bg-white {% if appointment.status == 'confirmed' %}text-success{% elif appointment.status == 'pending' %}text-primary{% elif appointment.status == 'completed' %}text-info{% else %}text-danger{% endif %} px-3 py-2">{{ appointment.get_status_display }}</span>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <h5 class="mb-3">
+                        {% if user.user_type == 'patient' %}
+                            <i class="fas fa-user-md text-primary me-2"></i>Dr. {{ appointment.doctor.user.get_full_name }}
+                        {% else %}
+                            <i class="fas fa-user text-primary me-2"></i>{{ appointment.patient.user.get_full_name }}
+                        {% endif %}
+                    </h5>
+                    {% if user.user_type == 'patient' %}
+                    <p class="text-muted small mb-2"><i class="fas fa-stethoscope me-2"></i>{{ appointment.doctor.specialization }}</p>
+                    {% endif %}
+                    <div class="mb-2 pb-2 border-bottom"><i class="fas fa-clock text-primary me-2"></i><strong>{{ appointment.appointment_time }}</strong></div>
+                    <p class="mb-2 small"><strong>Reason:</strong> {{ appointment.reason|truncatewords:15 }}</p>
+                    {% if appointment.notes %}
+                    <div class="alert alert-info py-2 small"><strong>Notes:</strong> {{ appointment.notes|truncatewords:10 }}</div>
+                    {% endif %}
+                    {% if user.user_type == 'doctor' %}
+                    <a href="{% url 'appointments:update' appointment.id %}" class="btn btn-sm btn-primary"><i class="fas fa-edit me-1"></i>Manage</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="fas fa-calendar-times fa-5x text-muted mb-4" style="opacity:0.3;"></i>
+        <h4>No Appointments Found</h4>
+        <p class="text-muted">{% if user.user_type == 'patient' %}You haven't booked any appointments yet.{% else %}No patients have booked appointments with you yet.{% endif %}</p>
+        {% if user.user_type == 'patient' %}
+        <a href="{% url 'appointments:book' %}" class="btn btn-success btn-lg"><i class="fas fa-calendar-plus me-2"></i>Book Your First Appointment</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

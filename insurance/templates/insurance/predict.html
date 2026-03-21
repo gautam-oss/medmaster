@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}Insurance Cost Prediction - MedMaster{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-4">
+                <h2 class="fw-bold"><i class="fas fa-calculator me-2"></i>Insurance Cost Predictor</h2>
+                <p class="text-muted">Get an ML-powered estimate of your health insurance costs</p>
+            </div>
+            <div class="card shadow-lg border-0" style="border-radius:20px;">
+                <div class="card-header text-white border-0" style="background:linear-gradient(135deg,#8B5CF6,#7C3AED);border-radius:20px 20px 0 0;">
+                    <h4 class="mb-0"><i class="fas fa-file-medical me-2"></i>Enter Your Information</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold"><i class="fas fa-birthday-cake text-primary me-2"></i>Age</label>
+                                {{ form.age }}
+                                {% if form.age.errors %}<div class="text-danger small">{{ form.age.errors }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold"><i class="fas fa-venus-mars text-primary me-2"></i>Sex</label>
+                                {{ form.sex }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold"><i class="fas fa-weight text-primary me-2"></i>BMI</label>
+                                {{ form.bmi }}
+                                {% if form.bmi.errors %}<div class="text-danger small">{{ form.bmi.errors }}</div>{% endif %}
+                                <small class="text-muted">{{ form.bmi.help_text }}</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold"><i class="fas fa-child text-primary me-2"></i>Number of Children</label>
+                                {{ form.children }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold"><i class="fas fa-smoking text-danger me-2"></i>Smoker Status</label>
+                                {{ form.smoker }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold"><i class="fas fa-map-marker-alt text-primary me-2"></i>Region</label>
+                                {{ form.region }}
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-lg text-white" style="background:linear-gradient(135deg,#8B5CF6,#7C3AED);border-radius:50px;"><i class="fas fa-magic me-2"></i>Predict Insurance Cost</button>
+                            {% if user.is_authenticated %}
+                            <a href="{% url 'insurance:history' %}" class="btn btn-outline-secondary btn-lg" style="border-radius:50px;"><i class="fas fa-history me-2"></i>View History</a>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% if not user.is_authenticated %}
+            <div class="alert alert-info mt-4" style="border-radius:15px;">
+                <i class="fas fa-user-plus me-2"></i><strong>Tip:</strong>
+                <a href="{% url 'users:register_patient' %}" class="alert-link">Register</a> to save your prediction history!
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

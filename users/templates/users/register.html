@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% block title %}Register {{ user_type }} - MedMaster{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-8">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header text-center bg-success text-white rounded-top-4">
+                    <h3 class="mb-1"><i class="fas fa-user-plus"></i> Register as {{ user_type }}</h3>
+                    <p class="mb-0 small">Create your MedMaster account to get started</p>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating">{{ form.username }}<label>Username</label></div>
+                                {% if form.username.errors %}<div class="text-danger small mt-1">{{ form.username.errors|striptags }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">{{ form.email }}<label>Email</label></div>
+                            </div>
+                        </div>
+                        <div class="row g-3 mt-2">
+                            <div class="col-md-6"><div class="form-floating">{{ form.first_name }}<label>First Name</label></div></div>
+                            <div class="col-md-6"><div class="form-floating">{{ form.last_name }}<label>Last Name</label></div></div>
+                        </div>
+                        <div class="form-floating mt-3">{{ form.phone }}<label>Phone Number</label></div>
+
+                        {% if user_type == 'Patient' %}
+                            <div class="row g-3 mt-2">
+                                <div class="col-md-6"><div class="form-floating">{{ form.date_of_birth }}<label>Date of Birth</label></div></div>
+                                <div class="col-md-6"><div class="form-floating">{{ form.emergency_contact }}<label>Emergency Contact</label></div></div>
+                            </div>
+                            <div class="form-floating mt-3">{{ form.address }}<label>Address</label></div>
+                        {% else %}
+                            <div class="row g-3 mt-2">
+                                <div class="col-md-6"><div class="form-floating">{{ form.specialization }}<label>Specialization</label></div></div>
+                                <div class="col-md-6"><div class="form-floating">{{ form.license_number }}<label>License Number</label></div></div>
+                            </div>
+                            <div class="row g-3 mt-2">
+                                <div class="col-md-6"><div class="form-floating">{{ form.experience_years }}<label>Experience (Years)</label></div></div>
+                                <div class="col-md-6"><div class="form-floating">{{ form.consultation_fee }}<label>Consultation Fee</label></div></div>
+                            </div>
+                        {% endif %}
+
+                        <div class="card border-0 mt-4" style="background:linear-gradient(135deg,#f0f4ff,#e8f0fe);border-radius:16px;">
+                            <div class="card-body p-3">
+                                <h6 class="fw-bold mb-3" style="color:#667eea;">
+                                    <i class="fas fa-id-card me-2"></i>Aadhaar Card Upload
+                                    <span class="badge bg-secondary ms-2" style="font-size:0.7rem;">Optional</span>
+                                </h6>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold small text-muted"><i class="fas fa-camera me-1"></i>Front Side</label>
+                                        {{ form.aadhaar_front }}
+                                        {% if form.aadhaar_front.errors %}<div class="text-danger small mt-1">{{ form.aadhaar_front.errors|striptags }}</div>{% endif %}
+                                        <div class="small text-muted mt-1"><i class="fas fa-info-circle me-1"></i>JPG/PNG, max 5MB</div>
+                                        <div id="preview_front" class="mt-2" style="display:none;">
+                                            <img id="img_front" src="" alt="Front preview" class="img-fluid rounded-3" style="max-height:120px;object-fit:cover;border:2px solid #667eea;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold small text-muted"><i class="fas fa-camera me-1"></i>Back Side</label>
+                                        {{ form.aadhaar_back }}
+                                        {% if form.aadhaar_back.errors %}<div class="text-danger small mt-1">{{ form.aadhaar_back.errors|striptags }}</div>{% endif %}
+                                        <div class="small text-muted mt-1"><i class="fas fa-info-circle me-1"></i>JPG/PNG, max 5MB</div>
+                                        <div id="preview_back" class="mt-2" style="display:none;">
+                                            <img id="img_back" src="" alt="Back preview" class="img-fluid rounded-3" style="max-height:120px;object-fit:cover;border:2px solid #667eea;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="alert alert-warning mt-3 mb-0 py-2 small" style="border-radius:10px;">
+                                    <i class="fas fa-shield-alt me-1"></i>
+                                    <strong>Privacy Notice:</strong> Your Aadhaar details are stored securely and used only for identity verification.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-2">
+                            <div class="col-md-6">
+                                <div class="form-floating">{{ form.password1 }}<label>Password</label></div>
+                                {% if form.password1.errors %}<div class="text-danger small mt-1">{{ form.password1.errors|striptags }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">{{ form.password2 }}<label>Confirm Password</label></div>
+                                {% if form.password2.errors %}<div class="text-danger small mt-1">{{ form.password2.errors|striptags }}</div>{% endif %}
+                            </div>
+                        </div>
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-success btn-lg rounded-3"><i class="fas fa-user-plus me-2"></i>Register</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center bg-light rounded-bottom-4 py-3">
+                    <p class="mb-0">Already have an account? <a href="{% url 'users:login' %}">Login here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function previewImage(inputId, imgId, previewId) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    input.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                document.getElementById(imgId).src = e.target.result;
+                document.getElementById(previewId).style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+}
+document.addEventListener('DOMContentLoaded', function() {
+    const inputs = document.querySelectorAll('input[type="file"]');
+    if (inputs[0]) { inputs[0].id = 'id_aadhaar_front'; previewImage('id_aadhaar_front', 'img_front', 'preview_front'); }
+    if (inputs[1]) { inputs[1].id = 'id_aadhaar_back'; previewImage('id_aadhaar_back', 'img_back', 'preview_back'); }
+});
+</script>
+{% endblock %}

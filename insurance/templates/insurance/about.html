@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}About the Model - MedMaster{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-lg mb-4 border-0" style="border-radius:20px;">
+                <div class="card-header text-white border-0" style="background:linear-gradient(135deg,#667eea,#764ba2);border-radius:20px 20px 0 0;">
+                    <h3 class="mb-0"><i class="fas fa-brain me-2"></i>About the Insurance Cost Predictor</h3>
+                </div>
+                <div class="card-body p-4">
+                    <p>Our Insurance Cost Predictor uses Linear Regression ML to estimate annual health insurance costs based on personal health and demographic factors.</p>
+                    <h5 class="mt-4 mb-3">Feature Importance</h5>
+                    {% for feature, importance in feature_importance.items %}
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1"><span><strong>{{ feature }}</strong></span><span class="text-muted">{{ importance|floatformat:0 }}</span></div>
+                        <div class="progress" style="height:20px;">
+                            {% if importance > 20000 %}<div class="progress-bar bg-danger" style="width:100%;"></div>
+                            {% elif importance > 5000 %}<div class="progress-bar bg-warning" style="width:70%;"></div>
+                            {% elif importance > 2000 %}<div class="progress-bar bg-info" style="width:50%;"></div>
+                            {% else %}<div class="progress-bar bg-success" style="width:20%;"></div>{% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="alert alert-info mt-4">
+                        <strong>Disclaimer:</strong> This prediction is an estimate and should not be considered an official insurance quote.
+                    </div>
+                    <div class="d-flex gap-2 justify-content-center mt-4">
+                        <a href="{% url 'insurance:predict' %}" class="btn btn-primary"><i class="fas fa-calculator me-2"></i>Try the Predictor</a>
+                        <a href="{% url 'core:home' %}" class="btn btn-outline-secondary"><i class="fas fa-home me-2"></i>Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

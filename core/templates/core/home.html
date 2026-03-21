@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Welcome to MedMaster — Healthcare Management System{% endblock %}
+{% block content %}
+<section style="background:linear-gradient(135deg,#667eea,#764ba2);padding:5rem 0;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 text-white">
+                <h1 class="display-3 fw-bold mb-4">MedMaster<br><span style="opacity:0.85;">Your Health, Our Priority</span></h1>
+                <p class="lead mb-4" style="color:#FDE68A;">AI-powered healthcare with easy appointment booking and smart insurance predictions.</p>
+                <div class="d-flex gap-3 flex-wrap mb-4">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'users:dashboard' %}" class="btn btn-light btn-lg px-4"><i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard</a>
+                    {% else %}
+                        <a href="{% url 'users:register_patient' %}" class="btn btn-light btn-lg px-4"><i class="fas fa-user-plus me-2"></i>Get Started Free</a>
+                        <a href="{% url 'users:login' %}" class="btn btn-outline-light btn-lg px-4"><i class="fas fa-sign-in-alt me-2"></i>Login</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <i class="fas fa-heartbeat fa-10x text-white" style="opacity:0.2;"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="text-center mb-5"><h2 class="fw-bold">Powerful Features</h2></div>
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="text-center p-4 h-100 border rounded-4 shadow-sm">
+                    <i class="fas fa-calendar-plus fa-3x text-primary mb-3"></i>
+                    <h5>Book Appointments</h5>
+                    <p class="text-muted small">Schedule with qualified doctors instantly</p>
+                    {% if user.is_authenticated and user.user_type == 'patient' %}
+                        <a href="{% url 'appointments:book' %}" class="btn btn-outline-primary btn-sm">Book Now</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="text-center p-4 h-100 border rounded-4 shadow-sm">
+                    <i class="fas fa-robot fa-3x text-success mb-3"></i>
+                    <h5>AI Health Assistant</h5>
+                    <p class="text-muted small">Get instant health advice powered by Gemini AI</p>
+                    <a href="{% url 'chatbot:chat' %}" class="btn btn-outline-success btn-sm">Try Now</a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="text-center p-4 h-100 border rounded-4 shadow-sm">
+                    <i class="fas fa-calculator fa-3x text-warning mb-3"></i>
+                    <h5>Insurance Calculator</h5>
+                    <p class="text-muted small">Predict insurance costs with ML</p>
+                    <a href="{% url 'insurance:predict' %}" class="btn btn-outline-warning btn-sm">Calculate</a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="text-center p-4 h-100 border rounded-4 shadow-sm">
+                    <i class="fas fa-clipboard-list fa-3x text-info mb-3"></i>
+                    <h5>Health Records</h5>
+                    <p class="text-muted small">Track appointments and predictions</p>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'users:dashboard' %}" class="btn btn-outline-info btn-sm">View Records</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5" style="background:#f8f9fa;">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-4">Ready to Get Started?</h2>
+        {% if user.is_authenticated %}
+            <a href="{% url 'users:dashboard' %}" class="btn btn-primary btn-lg px-5">Go to Dashboard</a>
+        {% else %}
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="{% url 'users:register_patient' %}" class="btn btn-primary btn-lg px-5"><i class="fas fa-user-plus me-2"></i>Register as Patient</a>
+                <a href="{% url 'users:register_doctor' %}" class="btn btn-success btn-lg px-5"><i class="fas fa-user-md me-2"></i>Register as Doctor</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
