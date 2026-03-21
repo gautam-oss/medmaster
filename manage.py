@@ -3,7 +3,8 @@ import os
 import sys
 
 def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'medmaster.settings')
+    # Default to local (SQLite) settings — Docker overrides this via environment
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'medmaster.settings.local')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

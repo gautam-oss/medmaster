@@ -1,11 +1,7 @@
 import os
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-SECRET_KEY = 'django-insecure-local-dev-key-change-in-production-12345'
-DEBUG = True
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -50,13 +46,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'medmaster.wsgi.application'
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
 AUTH_USER_MODEL = 'users.User'
 AUTH_PASSWORD_VALIDATORS = [
