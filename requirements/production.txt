@@ -1,0 +1,11 @@
+-r base.txt
+
+# WSGI server
+gunicorn
+
+# PostgreSQL driver
+psycopg2-binary
+
+# AWS S3 for static + media files (Phase 5)
+django-storages[s3]
+boto3

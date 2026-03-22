@@ -12,10 +12,11 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt .
+# Copy requirements folder first (Docker cache layer — only rebuilds
+# when requirements change, not on every code change)
+COPY requirements/ requirements/
 RUN pip install --upgrade pip && \
-    pip install -r requirements.txt && \
-    pip install gunicorn psycopg2-binary
+    pip install -r requirements/production.txt
 
 COPY . .
 

@@ -1,3 +1,4 @@
+# Python
 __pycache__/
 *.py[cod]
 *.so
@@ -6,23 +7,39 @@ __pycache__/
 dist/
 build/
 *.log
+
+# Django
 db.sqlite3
+staticfiles/
+media/
+
+# Environment files — NEVER commit these
 .env
 .env.*
 *.env
+
+# Virtual environments
 venv/
 env/
 ENV/
-staticfiles/
-media/
+.venv/
+
+# Testing
 .pytest_cache/
 .coverage
 htmlcov/
+
+# OS
 .DS_Store
 Thumbs.db
 *.tmp
 *.bak
+
+# Logs
 logs/
+
+# Node (if ever added)
 node_modules/
+
+# ML model (trained locally, not committed)
 insurance/trained_model.pkl
-media/

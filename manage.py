@@ -2,8 +2,10 @@
 import os
 import sys
 
+
 def main():
-    # Default to local (SQLite) settings — Docker overrides this via environment
+    # Default to local (SQLite) settings.
+    # Docker overrides this to production via DJANGO_SETTINGS_MODULE env var.
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'medmaster.settings.local')
     try:
         from django.core.management import execute_from_command_line
@@ -14,6 +16,7 @@ def main():
             "forget to activate a virtual environment?"
         ) from exc
     execute_from_command_line(sys.argv)
+
 
 if __name__ == '__main__':
     main()
